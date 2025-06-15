@@ -1,26 +1,11 @@
+import {PROVIDER_INFO} from '../../lib/ai/providers/factory';
+
 type PlayerCardProps = {
 	player: {id: string; name: string; provider: string};
 	index: number;
 	showRemove?: boolean;
 	onRemove?: (playerId: string) => void;
 	className?: string;
-};
-
-const getProviderLogo = (provider: string) => {
-	switch (provider) {
-		case 'openai':
-			return '/openai.jpg';
-		case 'anthropic':
-			return '/anthropic.jpg';
-		case 'google':
-			return '/gemini.jpg';
-		case 'ollama':
-			return '/ollama.jpg';
-		case 'mock':
-			return '/mock.svg';
-		default:
-			return null;
-	}
 };
 
 export const SelectedPlayerCard = ({
@@ -30,7 +15,7 @@ export const SelectedPlayerCard = ({
 	onRemove,
 	className = '',
 }: PlayerCardProps) => {
-	const providerLogo = getProviderLogo(player.provider);
+	const providerInfo = PROVIDER_INFO[player.provider as keyof typeof PROVIDER_INFO] ?? PROVIDER_INFO.other;
 
 	return (
 		<div className={`flex items-center justify-between bg-blue-50 border-blue-400 border-6 p-4 pr-6 shadow-lg transform ${index % 2 === 1 ? '-rotate-1' : ''} ${className}`}>
@@ -42,14 +27,14 @@ export const SelectedPlayerCard = ({
 					<div className='font-black text-lg'>{player.name}</div>
 					<div className='flex items-center text-sm text-stone-800'>
 						{index === 0 && <span className='text-blue-600 font-black mr-2'>FIRST GUESSER</span>}
-						{providerLogo && (
+						{providerInfo.logo && (
 							<img
-								src={providerLogo}
-								alt={player.provider}
+								src={providerInfo.logo}
+								alt={`${providerInfo.name} logo`}
 								className='w-5 h-5 rounded mr-2 border-2 border-stone-400'
 							/>
 						)}
-						<span className='text-xs text-stone-800 capitalize font-bold'>{player.provider}</span>
+						<span className='text-xs text-stone-800 font-bold'>{providerInfo.name}</span>
 					</div>
 				</div>
 			</div>
