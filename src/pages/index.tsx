@@ -30,7 +30,7 @@ const Home = () => {
 	}, [currentStep, currentRound]);
 
 	return (
-		<div>
+		<div className='max-w-5xl mx-auto pt-12 pb-24 px-6'>
 			{currentStep === 'setup'
 				? (
 					<GameSetup />

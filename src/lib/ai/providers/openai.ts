@@ -14,7 +14,7 @@ const createOpenAIConfig = (model: string, apiKey: string): ProviderConfig => ({
 			{role: 'system', content: SYSTEM_PROMPT},
 			{role: 'user', content: prompt},
 		],
-		max_tokens: 1000,
+		max_completion_tokens: 1000,
 	}),
 	extractContent: (data: any) => data.choices[0]?.message?.content || '',
 });

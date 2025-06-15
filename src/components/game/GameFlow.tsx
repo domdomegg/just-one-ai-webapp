@@ -26,7 +26,6 @@ export const GameFlow = () => {
 		clues,
 		guesserThinking,
 		currentGuess,
-		isLoading,
 		error,
 		rounds,
 		players,
@@ -74,7 +73,7 @@ export const GameFlow = () => {
 
 	if (isGameComplete) {
 		return (
-			<div className='max-w-6xl mx-auto p-6 bg-orange-50 min-h-screen'>
+			<div>
 				{/* Game Complete Header */}
 				<div className='text-center bg-white border-8 border-orange-400 p-8 my-8 shadow-xl transform -rotate-1'>
 					<h1 className='text-5xl font-black mb-4 text-orange-600 transform rotate-1'>🎉 GAME COMPLETE! 🎉</h1>
@@ -91,18 +90,18 @@ export const GameFlow = () => {
 				</div>
 
 				{/* Game Recap */}
-				<div className='bg-white my-8 border-8 border-blue-400 shadow-xl p-8 transform rotate-1'>
-					<h2 className='text-3xl font-black mb-8 text-center text-blue-600 transform -rotate-1'>📝 GAME RECAP</h2>
+				<div className='bg-white my-8 border-8 border-blue-400 shadow-xl p-8 transform'>
+					<h2 className='text-3xl font-black mb-8 text-center text-blue-600 transform'>📝 GAME RECAP</h2>
 
 					<div className='space-y-8'>
-						{rounds.map((round, index) => {
+						{rounds.map((round, roundIndex) => {
 							// Find the guesser for this round by finding who is NOT in the clues
 							const clueGiverIds = round.clues.map((c) => c.playerId);
 							const guesser = players.find((p) => !clueGiverIds.includes(p.id));
 							const activeClues = round.clues.filter((c) => !c.isEliminated);
 
 							return (
-								<div key={round.roundNumber} className={'border-6 border-yellow-400 p-6 bg-yellow-50 shadow-lg'}>
+								<div key={round.roundNumber} className={`border-6 border-yellow-400 p-6 bg-yellow-50 shadow-lg ${roundIndex % 2 === 0 ? 'rotate-1' : '-rotate-1'}`}>
 									<div className='flex items-center justify-between mb-6'>
 										<h3 className='text-xl font-black text-purple-700'>
 											🎯 ROUND {round.roundNumber}: "<span className='text-orange-600'>{round.mysteryWord}</span>"
@@ -206,10 +205,10 @@ export const GameFlow = () => {
 	}
 
 	return (
-		<div className='max-w-4xl mx-auto p-6 bg-orange-50 min-h-screen'>
+		<div>
 			{/* Header */}
-			<div className='text-center my-8 bg-white border-8 border-orange-400 p-8 shadow-xl transform -rotate-1'>
-				<h1 className='text-5xl font-black mb-4 text-orange-600 transform rotate-2'>🎲 JUST ONE AI THEATER</h1>
+			<div className='text-center my-8 bg-white border-8 border-orange-400 p-12 shadow-xl -rotate-1'>
+				<h1 className='text-5xl font-black mb-4 text-orange-600 transform rotate-2'>🎲 JUST ONE: AI THEATER</h1>
 				<div className='text-xl font-bold'>
 					<span className='text-purple-600'>ROUND {currentRound}/{totalRounds}</span> •
 					<span className='text-blue-600 ml-2'>SCORE: {score}/{rounds.length}</span>
@@ -244,7 +243,6 @@ export const GameFlow = () => {
 			<div className='space-y-8'>
 				{STEP_ORDER.map((step, index) => {
 					const status = getStepStatus(step);
-					const isCurrentStep = step === currentStep;
 
 					return (
 						<div
@@ -260,9 +258,6 @@ export const GameFlow = () => {
 							<div className='flex items-center mb-6'>
 								<span className='text-4xl mr-6'>{getStepIcon(status)}</span>
 								<h3 className='text-2xl font-black text-purple-700'>{STEP_LABELS[step]}</h3>
-								{isCurrentStep && isLoading && (
-									<span className='ml-4 text-blue-600 font-black text-lg'>⏳ PROCESSING...</span>
-								)}
 							</div>
 
 							{/* Step Content */}
@@ -271,10 +266,10 @@ export const GameFlow = () => {
 									{/* Clue Generation - Always show clue givers */}
 									<div>
 										<div className='grid grid-cols-2 md:grid-cols-3 gap-6'>
-											{clueGivers.map((player, playerIndex) => {
+											{clueGivers.map((player) => {
 												const playerClue = clues.find((c) => c.playerId === player.id);
 												return (
-													<div key={player.id} className={`bg-white p-6 border-6 border-purple-400 shadow-lg transform ${playerIndex % 3 === 0 ? 'rotate-2' : playerIndex % 3 === 1 ? '-rotate-1' : 'rotate-1'}`}>
+													<div key={player.id} className={'bg-white p-6 border-6 border-purple-400 shadow-lg'}>
 														<div className='font-black text-sm text-purple-600 mb-3'>
 															🤖 {player.name}
 														</div>

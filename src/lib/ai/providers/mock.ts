@@ -14,7 +14,7 @@ export class MockAIProvider extends AIProvider {
 
 	async getText(prompt: string): Promise<AIResponse> {
 		// Simulate thinking time
-		const delay = 1000 + (Math.random() * 2000);
+		const delay = 200 + (Math.random() * 500);
 		await new Promise((resolve) => {
 			setTimeout(resolve, delay);
 		});

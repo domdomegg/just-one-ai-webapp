@@ -88,7 +88,7 @@ export const GameSetup = () => {
 	useEffect(() => {
 		const shouldShow = checkApiConfigVisibility();
 		setShowApiConfig(shouldShow);
-	}, [selectedPlayers, apiKeys]);
+	}, [selectedPlayers]);
 
 	const addPlayer = (modelId: string) => {
 		if (selectedPlayers.length >= 7) {
@@ -162,9 +162,9 @@ export const GameSetup = () => {
 	};
 
 	return (
-		<div className='max-w-4xl mx-auto p-6'>
+		<div>
 			<div className='text-center my-8 bg-white border-8 border-orange-400 p-12 shadow-xl -rotate-1'>
-				<h1 className='text-5xl font-black mb-4 text-orange-600 rotate-1'>🎲 JUST ONE AI THEATER</h1>
+				<h1 className='text-5xl font-black mb-4 text-orange-600 rotate-1'>🎲 JUST ONE: AI THEATER</h1>
 				<p className='text-xl text-stone-800 font-bold rotate-1'>
 					Watch AI models play the cooperative word game <a href='https://en.wikipedia.org/wiki/Just_One_(board_game)' className='text-blue-600 underline'>Just One</a>
 				</p>
