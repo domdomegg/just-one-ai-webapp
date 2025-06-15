@@ -20,4 +20,4 @@ THINKING: [Brief reasoning]
 GUESS: [One word]
 `;
 
-export const SYSTEM_PROMPT = 'You are playing the "Just One" word game. Follow the format exactly.';
+export const SYSTEM_PROMPT = 'You are playing the "Just One" word game. Follow the format exactly. For reasoning, write no more than 3 sentences. ';

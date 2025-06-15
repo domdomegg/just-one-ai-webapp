@@ -3,6 +3,8 @@ import {useGameSelectors} from '../../lib/stores/gameSelectors';
 import {gameActions} from '../../lib/stores/gameActionsStore';
 import {isCorrectGuess} from '../../lib/game/gameLogic';
 import {ThinkingTooltip} from '../ui/ThinkingTooltip';
+import {Card} from '../ui/Card';
+import {Button} from '../ui/Button';
 
 const STEP_LABELS = {
 	setup: 'Game Setup',
@@ -75,22 +77,24 @@ export const GameFlow = () => {
 		return (
 			<div>
 				{/* Game Complete Header */}
-				<div className='text-center bg-white border-8 border-orange-400 p-8 my-8 shadow-xl transform -rotate-1'>
+				<Card variant='primary' rotation='left' className='text-center my-8 bg-white border-orange-400'>
 					<h1 className='text-5xl font-black mb-4 text-orange-600 transform rotate-1'>🎉 GAME COMPLETE! 🎉</h1>
 					<div className='text-3xl mb-3 text-stone-800 font-bold'>Final Score: <span className='text-blue-600'>{finalScore.score}</span>/<span className='text-green-600'>{totalRounds}</span></div>
 					<div className='text-2xl mb-6 text-purple-600 font-bold'>{finalScore.rating}</div>
-					<button
+					<Button
+						variant='success'
+						size='lg'
 						onClick={() => {
 							gameActions.resetGame();
 						}}
-						className='bg-orange-200 text-orange-700 px-10 py-4 font-black text-xl hover:from-orange-500 hover:to-yellow-500 transition-all transform hover:scale-110 shadow-xl border-4 border-orange-400'
+						icon='🎲'
 					>
-						🎲 PLAY AGAIN
-					</button>
-				</div>
+						PLAY AGAIN
+					</Button>
+				</Card>
 
 				{/* Game Recap */}
-				<div className='bg-white my-8 border-8 border-blue-400 shadow-xl p-8 transform'>
+				<Card variant='primary'>
 					<h2 className='text-3xl font-black mb-8 text-center text-blue-600 transform'>📝 GAME RECAP</h2>
 
 					<div className='space-y-8'>
@@ -199,7 +203,7 @@ export const GameFlow = () => {
 							No rounds completed yet.
 						</div>
 					)}
-				</div>
+				</Card>
 			</div>
 		);
 	}
@@ -219,14 +223,16 @@ export const GameFlow = () => {
 			{error && (
 				<div className='bg-red-100 border-8 border-red-400 text-red-700 px-6 py-4 mb-8 flex justify-between items-center font-black transform rotate-1'>
 					<span>❌ {error}</span>
-					<button
+					<Button
+						variant='danger'
+						size='sm'
 						onClick={() => {
 							gameActions.resetGame();
 						}}
-						className='bg-red-600 text-white px-6 py-3 text-sm hover:bg-red-700 font-black border-4 border-red-800'
+						icon='🔄'
 					>
-						🔄 RESTART GAME
-					</button>
+						RESTART GAME
+					</Button>
 				</div>
 			)}
 

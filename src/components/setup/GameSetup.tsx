@@ -2,6 +2,10 @@ import {useState, useEffect} from 'react';
 import {useGameStateStore} from '../../lib/stores/gameStateStore';
 import {gameActions} from '../../lib/stores/gameActionsStore';
 import type {AIPlayer} from '../../lib/game/gameTypes';
+import {Card} from '../ui/Card';
+import {SelectedPlayerCard} from '../ui/SelectedPlayerCard';
+import {FormField} from '../ui/FormField';
+import {Button} from '../ui/Button';
 
 const AVAILABLE_MODELS = {
 	anthropic: [
@@ -140,6 +144,45 @@ export const GameSetup = () => {
 		return selectedPlayers.length >= 3 && getMissingApiKeys().length === 0;
 	};
 
+	const getProviderLabel = (provider: string) => {
+		switch (provider) {
+			case 'openai':
+				return 'OPENAI API KEY';
+			case 'anthropic':
+				return 'ANTHROPIC API KEY';
+			case 'google':
+				return 'GOOGLE AI API KEY';
+			default:
+				return 'OLLAMA ENDPOINT URL';
+		}
+	};
+
+	const getProviderPlaceholder = (provider: string) => {
+		switch (provider) {
+			case 'openai':
+				return 'sk-...';
+			case 'anthropic':
+				return 'sk-ant-...';
+			case 'google':
+				return 'AI...';
+			default:
+				return 'http://localhost:11434';
+		}
+	};
+
+	const getProviderHelpLink = (provider: string) => {
+		switch (provider) {
+			case 'openai':
+				return 'https://platform.openai.com/api-keys';
+			case 'anthropic':
+				return 'https://console.anthropic.com/settings/keys';
+			case 'google':
+				return 'https://aistudio.google.com/apikey';
+			default:
+				return undefined;
+		}
+	};
+
 	const handleStartGame = () => {
 		if (!canStartGame()) {
 			return;
@@ -162,27 +205,31 @@ export const GameSetup = () => {
 	};
 
 	return (
-		<div>
-			<div className='text-center my-8 bg-white border-8 border-orange-400 p-12 shadow-xl -rotate-1'>
+		<div className='space-y-16'>
+			<Card variant='primary' rotation='left' className='text-center bg-white border-orange-400'>
 				<h1 className='text-5xl font-black mb-4 text-orange-600 rotate-1'>🎲 JUST ONE: AI THEATER</h1>
 				<p className='text-xl text-stone-800 font-bold rotate-1'>
 					Watch AI models play the cooperative word game <a href='https://en.wikipedia.org/wiki/Just_One_(board_game)' className='text-blue-600 underline'>Just One</a>
 				</p>
-			</div>
+			</Card>
 
-			<div className='my-8 bg-yellow-50 border-8 border-yellow-400 p-8 rotate-1'>
-				<h3 className='font-black mb-4 text-purple-700 text-2xl rotate-1'>📋 HOW IT WORKS</h3>
-				<ul className='text-sm text-stone-800 space-y-3 font-bold'>
-					<li>🎯 One AI is the guesser, others give clues</li>
-					<li>✏️ Each clue-giver writes one word to help guess the mystery word</li>
-					<li>❌ Identical clues are eliminated before the guesser sees them</li>
-					<li>🤔 The guesser gets one chance to guess the mystery word</li>
-					<li>🏆 The goal is to guess as many words as possible in 13 rounds</li>
-					<li>💭 Hover over AI responses to see their thinking process!</li>
-				</ul>
-			</div>
+			<Card variant='secondary' rotation='right'>
+				<Card.Header>
+					<h3 className='font-black text-purple-700 text-2xl rotate-1'>📋 HOW IT WORKS</h3>
+				</Card.Header>
+				<Card.Content>
+					<ul className='text-stone-800 space-y-3 font-bold'>
+						<li>🎯 One AI is the guesser, others give clues</li>
+						<li>✏️ Each clue-giver writes one word to help guess the mystery word</li>
+						<li>❌ Identical clues are eliminated before the guesser sees them</li>
+						<li>🤔 The guesser gets one chance to guess the mystery word</li>
+						<li>🏆 The goal is to guess as many words as possible in 13 rounds</li>
+						<li>💭 Hover over AI responses to see their thinking process!</li>
+					</ul>
+				</Card.Content>
+			</Card>
 
-			<div className='bg-white border-8 border-blue-400 shadow-xl p-8'>
+			<Card variant='primary' className='space-y-16'>
 				<h2 className='text-3xl font-black mb-8 text-blue-600 transform'>🤖 SELECT AI PLAYERS</h2>
 
 				{error && (
@@ -199,10 +246,10 @@ export const GameSetup = () => {
 
 				{/* Available Models */}
 				<div>
-					<h3 className='text-2xl font-black mb-6 text-purple-700'>AVAILABLE MODELS</h3>
-					<div>
+					<h3 className='text-2xl font-black mb-8 text-purple-700'>AVAILABLE MODELS</h3>
+					<div className='space-y-12'>
 						{Object.entries(AVAILABLE_MODELS).map(([groupKey, models], groupIndex) => (
-							<div key={groupKey} className={`my-12 transform ${groupIndex % 2 === 0 ? 'rotate-1' : '-rotate-0.5'}`}>
+							<div key={groupKey} className={`${groupIndex % 2 === 0 ? 'rotate-1' : '-rotate-0.5'}`}>
 								<div className='flex items-center mb-2'>
 									{PROVIDER_INFO[groupKey as keyof typeof PROVIDER_INFO].logo && (
 										<img
@@ -240,51 +287,17 @@ export const GameSetup = () => {
 
 				{/* Selected Players */}
 				{selectedPlayers.length > 0 && (
-					<div className='my-16'>
+					<div>
 						<h3 className='text-2xl font-black mb-6 text-purple-700'>SELECTED PLAYERS</h3>
 						<div className='space-y-4'>
 							{selectedPlayers.map((player, index) => (
-								<div key={player.id} className={`flex items-center justify-between bg-blue-50 border-6 border-blue-400 p-4 pr-6 shadow-lg transform ${index % 2 === 0 ? '' : '-rotate-1'}`}>
-									<div className='flex items-center space-x-4'>
-										<div className='bg-blue-500 text-white w-10 h-10 flex items-center justify-center text-lg font-black border-4 border-blue-700'>
-											{index + 1}
-										</div>
-										<div>
-											<div className='font-black text-lg'>{player.name}</div>
-											<div className='flex items-center text-sm text-stone-800'>
-												{index === 0 && <span className='text-blue-600 font-black mr-2'>FIRST GUESSER</span>}
-												{(player.provider === 'openai' || player.provider === 'anthropic' || player.provider === 'google') && (
-													<img
-														src={
-															player.provider === 'openai'
-																? '/openai.jpg'
-																: player.provider === 'anthropic'
-																	? '/anthropic.jpg'
-																	: player.provider === 'google' ? '/gemini.jpg' : ''
-														}
-														alt={player.provider}
-														className='w-5 h-5 rounded mr-2 border-2 border-stone-400'
-													/>
-												)}
-												{player.provider === 'ollama' && (
-													<img src='/ollama.jpg' alt='ollama' className='w-5 h-5 rounded mr-2 border-2 border-stone-400' />
-												)}
-												{player.provider === 'mock' && (
-													<img src='/mock.png' alt='mock' className='w-5 h-5 rounded mr-2 border-2 border-stone-400' />
-												)}
-												<span className='text-xs text-stone-800 capitalize font-bold'>{player.provider}</span>
-											</div>
-										</div>
-									</div>
-									<button
-										onClick={() => {
-											removePlayer(player.id);
-										}}
-										className='text-red-600 hover:text-red-800 text-3xl font-black cursor-pointer p-4 -m-4'
-									>
-										×
-									</button>
-								</div>
+								<SelectedPlayerCard
+									key={player.id}
+									player={player}
+									index={index}
+									showRemove={true}
+									onRemove={removePlayer}
+								/>
 							))}
 						</div>
 					</div>
@@ -292,17 +305,18 @@ export const GameSetup = () => {
 
 				{/* API Configuration */}
 				{getRequiredProviders().length > 0 && (
-					<div className='mb-8'>
+					<div>
 						<div className='flex items-center justify-between mb-6'>
 							<h3 className='text-2xl font-black text-purple-700'>API CONFIGURATION</h3>
-							<button
+							<Button
+								variant='secondary'
+								size='sm'
 								onClick={() => {
 									setShowApiConfig(!showApiConfig);
 								}}
-								className='text-blue-600 hover:text-blue-800 text-sm font-black border-4 border-blue-400 px-4 py-2 bg-blue-50'
 							>
 								{showApiConfig ? 'HIDE' : 'SHOW'} API KEYS
-							</button>
+							</Button>
 						</div>
 
 						{showApiConfig && (
@@ -313,48 +327,16 @@ export const GameSetup = () => {
 
 								{getRequiredProviders().map((provider) => (
 									<div key={provider}>
-										<div className='flex items-center justify-between mb-3'>
-											<label className='block text-sm font-black text-stone-800'>
-												{provider === 'openai' && 'OPENAI API KEY'}
-												{provider === 'anthropic' && 'ANTHROPIC API KEY'}
-												{provider === 'google' && 'GOOGLE AI API KEY'}
-												{provider === 'ollama' && 'OLLAMA ENDPOINT URL'}
-											</label>
-											{provider !== 'ollama' && (
-												<a
-													href={
-														provider === 'openai'
-															? 'https://platform.openai.com/api-keys'
-															: provider === 'anthropic'
-																? 'https://console.anthropic.com/settings/keys'
-																: provider === 'google'
-																	? 'https://aistudio.google.com/apikey'
-																	: '#'
-													}
-													target='_blank'
-													rel='noopener noreferrer'
-													className='text-xs text-blue-600 hover:text-blue-800 font-black border-2 border-blue-400 px-2 py-1 bg-blue-50'
-												>
-													GET API KEY →
-												</a>
-											)}
-										</div>
-										<input
+										<FormField
+											label={getProviderLabel(provider)}
 											type={provider === 'ollama' ? 'url' : 'password'}
 											value={apiKeys[provider]}
-											onChange={(e) => {
-												setApiKeys((prev) => ({...prev, [provider]: e.target.value}));
+											onChange={(value) => {
+												setApiKeys((prev) => ({...prev, [provider]: value}));
 											}}
-											placeholder={
-												provider === 'openai'
-													? 'sk-...'
-													: provider === 'anthropic'
-														? 'sk-ant-...'
-														: provider === 'google'
-															? 'AI...'
-															: 'http://localhost:11434'
-											}
-											className='w-full px-4 py-3 border-4 border-stone-400 focus:outline-none focus:border-blue-500 font-bold'
+											placeholder={getProviderPlaceholder(provider)}
+											helpLink={getProviderHelpLink(provider)}
+											helpText={provider !== 'ollama' ? 'GET API KEY →' : undefined}
 										/>
 										{provider === 'ollama' && (
 											<div className='mt-6'>
@@ -362,20 +344,17 @@ export const GameSetup = () => {
 												{selectedPlayers
 													.filter((p) => p.provider === 'ollama')
 													.map((player) => (
-														<div key={player.id} className='mb-4'>
-															<label className='block text-xs font-black text-stone-800 mb-2'>
-																{player.name} - MODEL NAME
-															</label>
-															<input
-																type='text'
-																value={ollamaModels[player.id] || ''}
-																onChange={(e) => {
-																	setOllamaModels((prev) => ({...prev, [player.id]: e.target.value}));
-																}}
-																placeholder='llama3.3, qwen2.5, mistral, etc.'
-																className='w-full px-4 py-3 border-4 border-stone-400 focus:outline-none focus:border-blue-500 text-sm font-bold'
-															/>
-														</div>
+														<FormField
+															key={player.id}
+															label={`${player.name} - MODEL NAME`}
+															type='text'
+															value={ollamaModels[player.id] || ''}
+															onChange={(value) => {
+																setOllamaModels((prev) => ({...prev, [player.id]: value}));
+															}}
+															placeholder='llama3.3, qwen2.5, mistral, etc.'
+															className='mb-4'
+														/>
 													))}
 											</div>
 										)}
@@ -387,17 +366,16 @@ export const GameSetup = () => {
 				)}
 
 				<div className='text-center'>
-					<button
-						onClick={handleStartGame}
+					<Button
+						variant='primary'
+						size='lg'
 						disabled={!canStartGame()}
-						className={`px-12 py-6 font-black text-2xl transition-all shadow-xl border-8 ${
-							canStartGame()
-								? 'bg-green-100 text-green-900 hover:scale-110 border-green-600 cursor-pointer scale-105'
-								: 'bg-stone-300 text-stone-500 cursor-not-allowed border-stone-400'
-						}`}
+						onClick={handleStartGame}
+						icon='🎮'
+						className={canStartGame() ? 'scale-105' : ''}
 					>
-						🎮 START GAME
-					</button>
+						START GAME
+					</Button>
 
 					{selectedPlayers.length < 3 && (
 						<p className='text-sm text-stone-800 mt-4 font-bold'>
@@ -411,8 +389,7 @@ export const GameSetup = () => {
 						</p>
 					)}
 				</div>
-
-			</div>
+			</Card>
 		</div>
 	);
 };
