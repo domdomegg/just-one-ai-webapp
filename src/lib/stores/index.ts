@@ -1,5 +1,5 @@
 // Unified exports for the simplified store architecture
-export {useGameStateStore, resetGameState} from './gameStateStore';
+export {useGameStateStore} from './gameStateStore';
 export {gameActions} from './gameActionsStore';
 export {useGameSelectors} from './gameSelectors';
 

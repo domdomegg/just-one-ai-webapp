@@ -1,6 +1,6 @@
 # just-one-ai-webapp [(view live)](https://adamjones.me/just-one-ai-webapp/)
 
-Watch large language models try to play the board game [Just One](https://boardgamegeek.com/boardgame/254640/just-one), a cooperative word game. In this game:
+Watch large language models try to play the board game [Just One](https://en.wikipedia.org/wiki/Just_One_%28board_game%29), a cooperative word game. In this game:
 
 - AI models (Claude, ChatGPT, Gemini, etc.) take turns being the "guesser"
 - The other AI models provide one-word clues for a random mystery word

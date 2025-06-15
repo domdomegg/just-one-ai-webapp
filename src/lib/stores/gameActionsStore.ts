@@ -1,4 +1,4 @@
-import {useGameStateStore} from './gameStateStore';
+import {useGameStateStore, initialState} from './gameStateStore';
 import {getRandomWord} from '../game/wordDatabase';
 import {
 	processClueElimination,
@@ -150,19 +150,6 @@ export const gameActions = {
 	},
 
 	resetGame() {
-		useGameStateStore.setState({
-			players: [],
-			totalRounds: 13,
-			currentRound: 0,
-			currentStep: 'setup',
-			score: 0,
-			mysteryWord: '',
-			clues: [],
-			guesserThinking: '',
-			currentGuess: null,
-			rounds: [],
-			isLoading: false,
-			error: null,
-		});
+		useGameStateStore.setState(initialState);
 	},
 };

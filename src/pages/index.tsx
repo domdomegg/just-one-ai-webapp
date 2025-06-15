@@ -30,7 +30,7 @@ const Home = () => {
 	}, [currentStep, currentRound]);
 
 	return (
-		<div className='min-h-screen bg-gray-50'>
+		<div>
 			{currentStep === 'setup'
 				? (
 					<GameSetup />

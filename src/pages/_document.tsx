@@ -6,7 +6,7 @@ const Document = () => {
 	return (
 		<Html lang='en'>
 			<Head />
-			<body className='antialiased'>
+			<body className='antialiased bg-orange-50 min-h-screen'>
 				<Main />
 				<NextScript />
 			</body>

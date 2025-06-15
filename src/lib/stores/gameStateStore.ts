@@ -30,7 +30,7 @@ export type GameState = {
 	error: string | null;
 };
 
-const initialState: GameState = {
+export const initialState: GameState = {
 	// Game configuration
 	players: [],
 	totalRounds: 13,
@@ -55,8 +55,3 @@ const initialState: GameState = {
 };
 
 export const useGameStateStore = create<GameState>(() => initialState);
-
-// Reset function
-export const resetGameState = () => {
-	useGameStateStore.setState(initialState);
-};
