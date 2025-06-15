@@ -75,23 +75,23 @@ export const GameSetup = () => {
 		}
 	}, []);
 
-	// Check if API config should be shown initially
-	const checkApiConfigVisibility = () => {
-		const requiredProviders = getRequiredProviders();
-		if (requiredProviders.length === 0) {
-			return false;
-		}
-
-		const missingKeys = requiredProviders.filter((provider) =>
-			!apiKeys[provider] || apiKeys[provider].trim() === '');
-
-		return missingKeys.length > 0;
-	};
-
 	// Update showApiConfig when selectedPlayers changes (not when API keys change)
 	useEffect(() => {
+		const checkApiConfigVisibility = () => {
+			const requiredProviders = getRequiredProviders();
+			if (requiredProviders.length === 0) {
+				return false;
+			}
+
+			const missingKeys = requiredProviders.filter((provider) =>
+				!apiKeys[provider] || apiKeys[provider].trim() === '');
+
+			return missingKeys.length > 0;
+		};
+
 		const shouldShow = checkApiConfigVisibility();
 		setShowApiConfig(shouldShow);
+	// eslint-disable-next-line react-hooks/exhaustive-deps -- should not update on apiKeys change
 	}, [selectedPlayers]);
 
 	const addPlayer = (modelId: string) => {

@@ -1,3 +1,5 @@
+/* eslint-disable max-lines */
+
 // Collection of mystery words for Just One game
 // https://github.com/first20hours/google-10000-english/blob/master/google-10000-english-usa-no-swears-medium.txt
 export const MYSTERY_WORDS = `about
